@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Đăng ký | FocusFlow</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <h2>Đăng ký</h2>
+    <form th:action="@{/auth/register}" method="post" th:object="${user}">
+        <input type="text" th:field="*{username}" placeholder="Tên đăng nhập" required>
+        <input type="password" th:field="*{password}" placeholder="Mật khẩu" required>
+        <button type="submit">Đăng ký</button>
+    </form>
+    <p>Đã có tài khoản?</p>
+    <a th:href="@{/login}">
+        <button>Đăng nhập</button>
+    </a>
+</body>
+</html>

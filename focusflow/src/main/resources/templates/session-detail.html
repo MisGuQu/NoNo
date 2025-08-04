@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Chi tiết Session | FocusFlow</title>
+</head>
+<body>
+    <h2>Chi tiết Session</h2>
+    <p>Tiêu đề: <span th:text="${session.title}"></span></p>
+    <p>Phương pháp: <span th:text="${session.methods}"></span></p>
+    <p>Ngày tạo: <span th:text="${session.createdAt}"></span></p>
+
+    <h3>Hành động</h3>
+    <button onclick="window.location.href='/blurting'">Ghi BLURTING</button>
+    <button onclick="window.location.href='/three-two-one'">Viết 3-2-1</button>
+    <button onclick="window.location.href='/feynman'">Ghi Feynman</button>
+</body>
+</html>

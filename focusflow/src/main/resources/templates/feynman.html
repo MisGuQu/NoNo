@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Feynman Notes | FocusFlow</title>
+</head>
+<body>
+    <h2>Ghi chú Feynman</h2>
+
+    <!-- Form ghi Feynman -->
+    <form th:action="@{/feynman/create}" method="post">
+        <input type="text" name="topic" placeholder="Chủ đề" required><br/>
+        <textarea name="explanation" placeholder="Giải thích theo cách của bạn..." required></textarea><br/>
+        <input type="hidden" name="sessionId" th:value="${sessionId}">
+        <button type="submit">Lưu</button>
+    </form>
+
+    <h3>Danh sách Feynman Notes</h3>
+    <table border="1">
+        <tr>
+            <th>Chủ đề</th>
+            <th>Giải thích</th>
+            <th>Ngày tạo</th>
+            <th>Hành động</th>
+        </tr>
+        <tr th:each="note : ${feynmans}">
+            <td th:text="${note.topic}"></td>
+            <td th:text="${note.explanation}"></td>
+            <td th:text="${note.createdAt}"></td>
+            <td>
+                <a th:href="@{'/feynman/delete/' + ${note.id}}">
+                    <button>Xóa</button>
+                </a>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

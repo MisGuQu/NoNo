@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lịch | FocusFlow</title>
+</head>
+<body>
+    <h2>Lịch</h2>
+    <a th:href="@{/schedule/create}">
+        <button>Tạo lịch mới</button>
+    </a>
+    <table border="1">
+        <tr>
+            <th>Tiêu đề</th>
+            <th>Mô tả</th>
+            <th>Bắt đầu</th>
+            <th>Kết thúc</th>
+        </tr>
+        <tr th:each="s : ${schedules}">
+            <td th:text="${s.title}"></td>
+            <td th:text="${s.description}"></td>
+            <td th:text="${s.startTime}"></td>
+            <td th:text="${s.endTime}"></td>
+        </tr>
+    </table>
+</body>
+</html>

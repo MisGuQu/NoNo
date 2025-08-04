@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>3-2-1 Technique | FocusFlow</title>
+</head>
+<body>
+    <h2>3-2-1 Reflection</h2>
+
+    <!-- Form ghi 3-2-1 -->
+    <form th:action="@{/three-two-one/create}" method="post">
+        <textarea name="threeThings" placeholder="3 điều bạn đã học được..." required></textarea><br/>
+        <textarea name="twoInteresting" placeholder="2 điều bạn thấy thú vị..." required></textarea><br/>
+        <textarea name="oneQuestion" placeholder="1 câu hỏi bạn còn thắc mắc..." required></textarea><br/>
+        <input type="hidden" name="sessionId" th:value="${sessionId}">
+        <button type="submit">Lưu</button>
+    </form>
+
+    <h3>Danh sách 3-2-1</h3>
+    <table border="1">
+        <tr>
+            <th>3 Điều</th>
+            <th>2 Điều thú vị</th>
+            <th>1 Câu hỏi</th>
+            <th>Ngày tạo</th>
+            <th>Hành động</th>
+        </tr>
+        <tr th:each="entry : ${threeTwoOnes}">
+            <td th:text="${entry.threeThings}"></td>
+            <td th:text="${entry.twoInteresting}"></td>
+            <td th:text="${entry.oneQuestion}"></td>
+            <td th:text="${entry.createdAt}"></td>
+            <td>
+                <a th:href="@{'/three-two-one/delete/' + ${entry.id}}">
+                    <button>Xóa</button>
+                </a>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

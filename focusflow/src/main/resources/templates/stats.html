@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thống kê | FocusFlow</title>
+</head>
+<body>
+    <h2>Thống kê</h2>
+    <p>Tổng Task: <span th:text="${totalTasks}"></span></p>
+    <p>Đã hoàn thành: <span th:text="${completedTasks}"></span></p>
+    <p>Tổng Pomodoro: <span th:text="${totalPomodoro}"></span></p>
+    <p>Thời gian học: <span th:text="${totalTimeSpent}"></span> phút</p>
+</body>
+</html>

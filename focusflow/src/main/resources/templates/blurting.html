@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Blurting | FocusFlow</title>
+</head>
+<body>
+    <h2>Blurting Notes</h2>
+
+    <!-- Form ghi Blurting -->
+    <form th:action="@{/blurting/create}" method="post">
+        <textarea name="content" placeholder="Nhập nội dung Blurting..." required></textarea>
+        <input type="hidden" name="sessionId" th:value="${sessionId}">
+        <button type="submit">Lưu</button>
+    </form>
+
+    <h3>Danh sách Blurting đã ghi</h3>
+    <table border="1">
+        <tr>
+            <th>Nội dung</th>
+            <th>Ngày tạo</th>
+            <th>Hành động</th>
+        </tr>
+        <tr th:each="note : ${blurtings}">
+            <td th:text="${note.content}"></td>
+            <td th:text="${note.createdAt}"></td>
+            <td>
+                <a th:href="@{'/blurting/delete/' + ${note.id}}">
+                    <button>Xóa</button>
+                </a>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

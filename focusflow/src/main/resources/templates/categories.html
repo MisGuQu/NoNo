@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Categories | FocusFlow</title>
+</head>
+<body>
+    <h2>Danh mục</h2>
+    <a th:href="@{/categories/create}">
+        <button>Tạo Danh mục mới</button>
+    </a>
+    <table border="1">
+        <tr>
+            <th>Tên</th>
+            <th>Hành động</th>
+        </tr>
+        <tr th:each="cat : ${categories}">
+            <td th:text="${cat.name}"></td>
+            <td>
+                <a th:href="@{'/categories/edit/' + ${cat.id}}">
+                    <button>Sửa</button>
+                </a>
+                <a th:href="@{'/categories/delete/' + ${cat.id}}">
+                    <button>Xóa</button>
+                </a>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

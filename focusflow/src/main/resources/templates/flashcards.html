@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Flashcards | FocusFlow</title>
+</head>
+<body>
+    <h2>Flashcards</h2>
+    <div th:each="card : ${flashcards}">
+        <p><strong>Q:</strong> <span th:text="${card.question}"></span></p>
+        <p><strong>A:</strong> <span th:text="${card.answer}"></span></p>
+        <button th:onclick="'location.href=\'/flashcards/review/' + ${card.id} + '\''">Đánh dấu đã ôn</button>
+        <hr/>
+    </div>
+</body>
+</html>

@@ -1,0 +1,160 @@
+CREATE DATABASE IF NOT EXISTS focusflow CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE focusflow;
+
+-- Người dùng
+CREATE TABLE users (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  role VARCHAR(50) DEFAULT 'ROLE_USER'
+);
+
+-- Danh mục công việc
+CREATE TABLE categories (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  user_id BIGINT,
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- Task
+CREATE TABLE tasks (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  completed BOOLEAN DEFAULT FALSE,
+  due_date DATE,
+  completed_at DATETIME,
+  pomodoro_count INT DEFAULT 0,
+  time_spent INT DEFAULT 0, -- phút
+  user_id BIGINT,
+  category_id BIGINT,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (category_id) REFERENCES categories(id)
+);
+
+-- Pomodoro Session
+CREATE TABLE pomodoro_sessions (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  focus_minutes INT,
+  break_minutes INT,
+  actual_focus_minutes INT,
+  started_at DATETIME,
+  ended_at DATETIME,
+  task_id BIGINT,
+  user_id BIGINT,
+  FOREIGN KEY (task_id) REFERENCES tasks(id),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- Session học (combo phương pháp)
+CREATE TABLE study_sessions (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  created_at DATETIME,
+  methods VARCHAR(255),
+  user_id BIGINT,
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- Blurting
+CREATE TABLE blurting (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  content TEXT,
+  created_at DATETIME,
+  session_id BIGINT,
+  user_id BIGINT,
+  FOREIGN KEY (session_id) REFERENCES study_sessions(id),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- 3-2-1
+CREATE TABLE three_two_one (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  three_things TEXT,
+  two_interesting TEXT,
+  one_question TEXT,
+  created_at DATETIME,
+  session_id BIGINT,
+  user_id BIGINT,
+  FOREIGN KEY (session_id) REFERENCES study_sessions(id),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- Feynman Note
+CREATE TABLE feynman_notes (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  topic VARCHAR(255),
+  explanation TEXT,
+  created_at DATETIME,
+  session_id BIGINT,
+  user_id BIGINT,
+  FOREIGN KEY (session_id) REFERENCES study_sessions(id),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- Flashcard (Active Recall + Spaced Repetition)
+CREATE TABLE flashcards (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  question TEXT,
+  answer TEXT,
+  next_review_date DATE,
+  review_count INT DEFAULT 0,
+  ease_factor DOUBLE DEFAULT 2.5,
+  created_at DATETIME,
+  session_id BIGINT,
+  user_id BIGINT,
+  FOREIGN KEY (session_id) REFERENCES study_sessions(id),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- Lịch (Schedule)
+CREATE TABLE schedules (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  start_time DATETIME,
+  end_time DATETIME,
+  status VARCHAR(50) DEFAULT 'Planned', -- Planned, Done, Missed
+  user_id BIGINT,
+  task_id BIGINT,
+  session_id BIGINT,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (task_id) REFERENCES tasks(id),
+  FOREIGN KEY (session_id) REFERENCES study_sessions(id)
+);
+
+-- User mẫu
+INSERT INTO users (username, password) VALUES ('testuser', '123456');
+
+-- Category mẫu
+INSERT INTO categories (name, user_id) VALUES ('Học tập', 1);
+
+-- Task mẫu
+INSERT INTO tasks (title, description, user_id, category_id) VALUES ('Học Spring Boot', 'Xong CRUD + Security', 1, 1);
+
+-- Pomodoro mẫu
+INSERT INTO pomodoro_sessions (focus_minutes, break_minutes, actual_focus_minutes, started_at, ended_at, task_id, user_id)
+VALUES (25, 5, 23, NOW(), NOW() + INTERVAL 25 MINUTE, 1, 1);
+
+-- Study Session mẫu
+INSERT INTO study_sessions (title, created_at, methods, user_id) VALUES ('Session OOP', NOW(), 'BLURTING,321,FEYNMAN', 1);
+
+-- Blurting
+INSERT INTO blurting (content, created_at, session_id, user_id) VALUES ('Nhớ tính đa hình', NOW(), 1, 1);
+
+-- 3-2-1
+INSERT INTO three_two_one (three_things, two_interesting, one_question, created_at, session_id, user_id)
+VALUES ('1. Kế thừa 2. Đa hình 3. Đóng gói', 'Hibernate & JPA', 'Làm sao JPA lazy?', NOW(), 1, 1);
+
+-- Feynman
+INSERT INTO feynman_notes (topic, explanation, created_at, session_id, user_id)
+VALUES ('OOP', 'Là cách tổ chức mã nguồn thành đối tượng.', NOW(), 1, 1);
+
+-- Flashcard
+INSERT INTO flashcards (question, answer, next_review_date, created_at, session_id, user_id)
+VALUES ('OOP là gì?', 'Lập trình hướng đối tượng.', CURDATE() + INTERVAL 1 DAY, NOW(), 1, 1);
+
+-- Schedule
+INSERT INTO schedules (title, description, start_time, end_time, status, user_id, task_id, session_id)
+VALUES ('Làm đồ án FocusFlow', 'Thực hiện CRUD các bảng chính', NOW(), NOW() + INTERVAL 3 HOUR, 'Planned', 1, 1, 1);
